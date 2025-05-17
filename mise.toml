@@ -1,5 +1,7 @@
 [tools]
 terraform = "1.11.4"
+python = "3.13.3"
+ruff = "latest"
 
 [settings]
 verbose = false
@@ -9,10 +11,19 @@ verbose = false
 TF_CLI_ARGS_plan = "-compact-warnings"
 TF_CLI_ARGS_apply = "-compact-warnings"
 
+# Automatic virtualenv activation
+_.python.venv = { path = ".venv", create = true }
+
 [tasks]
-format = "terraform fmt -recursive"
-validate = "terraform validate"
-plan-system = { dir = "infrastructure/system", run = "make tf-plan" }
-apply-system = { dir = "infrastructure/system", run = "make tf-apply" }
-plan-user = { dir = "infrastructure/user", run = "make tf-plan" }
-apply-user = { dir = "infrastructure/user", run = "make tf-apply" }
+
+tf-format = "terraform fmt -recursive"
+tf-validate = "terraform validate"
+tf-plan-system = { dir = "infrastructure/system", run = "make tf-plan" }
+tf-apply-system = { dir = "infrastructure/system", run = "make tf-apply" }
+tf-plan-user = { dir = "infrastructure/user", run = "make tf-plan" }
+tf-apply-user = { dir = "infrastructure/user", run = "make tf-apply" }
+
+p-install = {description = "Install dependencies", alias = "pi", dir = "modules/lambda", run = "uv pip install -r requirements.txt"}
+p-run = { description = "Run the application", alias = "pr", dir = "modules/lambda", run = "python app.py" }
+p-test = { description = "Run tests", alias = "pt", dir = "modules/lambda", run = "pytest tests/" }
+p-lint = { description = "Lint the code", alias = "pl", dir = "modules/lambda", run = "ruff src/" }

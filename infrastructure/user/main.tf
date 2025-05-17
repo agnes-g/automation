@@ -34,8 +34,9 @@ module "ec2_instance" {
 
   name = var.instance_name
 
-  instance_type          = "t2.micro"
-  monitoring             = false
-  vpc_security_group_ids = [module.ec2_sg.security_group_id]
-  subnet_id              = module.vpc.public_subnets[0]
+  instance_type               = "t2.micro"
+  monitoring                  = false
+  vpc_security_group_ids      = [module.ec2_sg.security_group_id]
+  subnet_id                   = module.vpc.public_subnets[0]
+  create_iam_instance_profile = true
 }

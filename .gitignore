@@ -1,2 +1,3 @@
 infrastructure/user/.terraform
 .idea
+.terraform
