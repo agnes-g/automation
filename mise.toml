@@ -1,0 +1,18 @@
+[tools]
+terraform = "1.11.4"
+
+[settings]
+verbose = false
+
+[env]
+# Common environment variables
+TF_CLI_ARGS_plan = "-compact-warnings"
+TF_CLI_ARGS_apply = "-compact-warnings"
+
+[tasks]
+format = "terraform fmt -recursive"
+validate = "terraform validate"
+plan-system = { dir = "infrastructure/system", run = "make tf-plan" }
+apply-system = { dir = "infrastructure/system", run = "make tf-apply" }
+plan-user = { dir = "infrastructure/user", run = "make tf-plan" }
+apply-user = { dir = "infrastructure/user", run = "make tf-apply" }
