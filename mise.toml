@@ -7,23 +7,53 @@ ruff = "latest"
 verbose = false
 
 [env]
-# Common environment variables
 TF_CLI_ARGS_plan = "-compact-warnings"
 TF_CLI_ARGS_apply = "-compact-warnings"
 
-# Automatic virtualenv activation
-_.python.venv = { path = ".venv", create = true }
+[env._.python.venv]
+path = ".venv"
+create = true
 
 [tasks]
-
 tf-format = "terraform fmt -recursive"
 tf-validate = "terraform validate"
-tf-plan-system = { dir = "infrastructure/system", run = "make tf-plan" }
-tf-apply-system = { dir = "infrastructure/system", run = "make tf-apply" }
-tf-plan-user = { dir = "infrastructure/user", run = "make tf-plan" }
-tf-apply-user = { dir = "infrastructure/user", run = "make tf-apply" }
 
-p-install = {description = "Install dependencies", alias = "pi", dir = "modules/lambda", run = "uv pip install -r requirements.txt"}
-p-run = { description = "Run the application", alias = "pr", dir = "modules/lambda", run = "python app.py" }
-p-test = { description = "Run tests", alias = "pt", dir = "modules/lambda", run = "pytest tests/" }
-p-lint = { description = "Lint the code", alias = "pl", dir = "modules/lambda", run = "ruff src/" }
+[tasks.tf-plan-system]
+dir = "infrastructure/system"
+run = "make tf-plan"
+
+[tasks.tf-apply-system]
+dir = "infrastructure/system"
+run = "make tf-apply"
+
+[tasks.tf-plan-user]
+dir = "infrastructure/user"
+run = "make tf-plan"
+
+[tasks.tf-apply-user]
+dir = "infrastructure/user"
+run = "make tf-apply"
+
+[tasks.p-install]
+description = "Install dependencies"
+alias = "pi"
+dir = "lambda"
+run = "uv pip install -r requirements.txt"
+
+[tasks.p-run]
+description = "Run the application"
+alias = "pr"
+dir = "lambda"
+run = "python app.py"
+
+[tasks.p-test]
+description = "Run tests"
+alias = "pt"
+dir = "lambda"
+run = "pytest tests/"
+
+[tasks.p-lint]
+description = "Lint the code"
+alias = "pl"
+dir = "lambda"
+run = "ruff check --select ALL --fix"
