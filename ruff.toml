@@ -1,3 +1,6 @@
 exclude = [
     "tests"
 ]
+
+[lint.per-file-ignores]
+"policy_attach.py" = ["INP001"]
