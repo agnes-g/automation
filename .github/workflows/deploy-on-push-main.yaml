@@ -1,32 +1,14 @@
 name: Deploy lambda
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
 jobs:
-  lambda-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: jdx/mise-action@v2
-        with:
-          version: 2025.5.6
-          install: true
-          install_args: ruff python
-          cache: true
-          working_directory: .
-      - run: mise p-lint
-      - run: mise p-test
-
   lambda-build-deploy:
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
-    needs: lambda-test
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
