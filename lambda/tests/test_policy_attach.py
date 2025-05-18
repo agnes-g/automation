@@ -57,7 +57,8 @@ class TestPolicyAttach(unittest.TestCase):
 
     def test_no_existing_instance_profile_and_instance_ids_attaches_default_instance_profile(self):
         with patch.dict(os.environ, {
-            "DEFAULT_INSTANCE_PROFILE_NAME": "default"
+            "DEFAULT_INSTANCE_PROFILE_NAME": "default",
+            "AWS_DEFAULT_REGION": "eu-west-1",
         }, clear=True):
             ec2_client = boto3.client('ec2')
             stubber = Stubber(ec2_client)
@@ -76,7 +77,8 @@ class TestPolicyAttach(unittest.TestCase):
 
     def test_existing_instance_profile_and__attaches_ssm_policy(self):
         with patch.dict(os.environ, {
-            "DEFAULT_INSTANCE_PROFILE_NAME": "default"
+            "DEFAULT_INSTANCE_PROFILE_NAME": "default",
+            "AWS_DEFAULT_REGION": "eu-west-1",
         }, clear=True):
             iam_client = boto3.client('iam')
             stubber = Stubber(iam_client)
