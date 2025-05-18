@@ -1,0 +1,54 @@
+name: Deploy lambda
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  lambda-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          version: 2025.5.6
+          install: true
+          install_args: ruff, python
+          cache: true
+          working_directory: .
+      - run: mise p-lint
+      - run: mise p-test
+  lambda-build-deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          version: 2025.5.6
+          install: true
+          install_args: aws-cli
+          cache: true
+          working_directory: .
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::654654380708:role/github-actions
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: eu-west-1
+
+      - name: create lambda zip
+        run: |
+          mise zip-lambda
+
+      - name: upload lambda zip artifact to s3
+        run: |
+          mise upload-lambda-zip
+
+      - name: deploy lambda
+        run: |
+          mise update-lambda-code
