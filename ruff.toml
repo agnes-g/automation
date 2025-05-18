@@ -1,0 +1,5 @@
+[tool.ruff.per-file-ignores]
+# Ignore all directories named `tests`.
+"tests/**" = ["D"]
+# Ignore all files that end in `_test.py`.
+"*_test.py" = ["D"]
