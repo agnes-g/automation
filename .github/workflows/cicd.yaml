@@ -15,7 +15,7 @@ jobs:
         with:
           version: 2025.5.6
           install: true
-          install_args: ruff, python
+          install_args: ruff python
           cache: true
           working_directory: .
       - run: mise p-lint
