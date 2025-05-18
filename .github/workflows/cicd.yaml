@@ -20,11 +20,13 @@ jobs:
           working_directory: .
       - run: mise p-lint
       - run: mise p-test
+
   lambda-build-deploy:
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
+    needs: lambda-test
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
