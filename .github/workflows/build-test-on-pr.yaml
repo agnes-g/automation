@@ -1,4 +1,4 @@
-name: Build and test lambda
+name: Build and tests lambda
 on:
   pull_request:
 jobs:
@@ -14,4 +14,4 @@ jobs:
           cache: true
           working_directory: .
       - run: mise p-lint
-      - run: mise p-test
+      - run: mise p-tests

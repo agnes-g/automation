@@ -50,7 +50,7 @@ run = "python app.py"
 
 [tasks.p-deps]
 description = "Install test dependencies"
-run = "uv pip install pytest"
+run = "uv pip install pytest boto3 botocore"
 
 [tasks.p-test]
 description = "Run tests"
