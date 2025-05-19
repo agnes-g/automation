@@ -28,6 +28,10 @@ run = "make tf-plan"
 dir = "infrastructure/system"
 run = "make tf-apply"
 
+[tasks.tf-destroy-system]
+dir = "infrastructure/system"
+run = "make tf-destroy"
+
 [tasks.tf-plan-user]
 dir = "infrastructure/user"
 run = "make tf-plan"
@@ -35,6 +39,10 @@ run = "make tf-plan"
 [tasks.tf-apply-user]
 dir = "infrastructure/user"
 run = "make tf-apply"
+
+[tasks.tf-destroy-user]
+dir = "infrastructure/user"
+run = "make tf-destroy"
 
 [tasks.p-install]
 description = "Install dependencies"
