@@ -1,5 +1,4 @@
 import os
-import sys
 import unittest
 from unittest import mock
 from unittest.mock import patch
@@ -45,17 +44,17 @@ EXISTING_INSTANCE_PROFILE = {
 
 
 class TestPolicyAttach(unittest.TestCase):
-    def test_empty_dict(self):
+    def test_empty_event(self):
         with self.assertRaises(SystemExit) as exit_exception:
             lambda_handler({},{})
         self.assertEqual(exit_exception.exception.code, 1)
 
-    def test_no_existing_instance_profile_and_no_instance_ids_exists(self):
+    def test_no_existing_instance_profile_and_no_instance_ids_exist(self):
         with self.assertRaises(SystemExit) as exit_exception:
             lambda_handler(NO_EXISTING_INSTANCE_PROFILE_NO_INSTANCE_IDS_EVENT,{})
         self.assertEqual(exit_exception.exception.code, 1)
 
-    def test_no_existing_instance_profile_and_instance_ids_attaches_default_instance_profile(self):
+    def test_no_instance_profile_attaches_default_instance_profile_to_instances(self):
         with patch.dict(os.environ, {
             "DEFAULT_INSTANCE_PROFILE_NAME": "default",
             "AWS_DEFAULT_REGION": "eu-west-1",
@@ -75,7 +74,7 @@ class TestPolicyAttach(unittest.TestCase):
                 lambda_handler(NO_EXISTING_INSTANCE_PROFILE_INSTANCE_IDS_EVENT,{})
 
 
-    def test_existing_instance_profile_and__attaches_ssm_policy(self):
+    def test_existing_instance_profile_attaches_ssm_policy(self):
         with patch.dict(os.environ, {
             "DEFAULT_INSTANCE_PROFILE_NAME": "default",
             "AWS_DEFAULT_REGION": "eu-west-1",
