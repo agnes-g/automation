@@ -1,0 +1,75 @@
+[tools]
+terraform = "1.11.4"
+python = "3.13.3"
+ruff = "0.11.10"
+aws-cli = "2.17.34"
+uv = "0.7.5"
+
+[settings]
+verbose = false
+
+[env]
+TF_CLI_ARGS_plan = "-compact-warnings"
+TF_CLI_ARGS_apply = "-compact-warnings"
+
+[env._.python.venv]
+path = ".venv"
+create = true
+
+[tasks]
+tf-format = "terraform fmt -recursive"
+tf-validate = "terraform validate"
+
+[tasks.tf-plan-system]
+dir = "infrastructure/system"
+run = "make tf-plan"
+
+[tasks.tf-apply-system]
+dir = "infrastructure/system"
+run = "make tf-apply"
+
+[tasks.tf-plan-user]
+dir = "infrastructure/user"
+run = "make tf-plan"
+
+[tasks.tf-apply-user]
+dir = "infrastructure/user"
+run = "make tf-apply"
+
+[tasks.p-install]
+description = "Install dependencies"
+alias = "pi"
+dir = "lambda"
+run = "uv pip install -r requirements.txt"
+
+[tasks.p-deps]
+description = "Install test dependencies"
+run = "uv pip install pytest boto3 botocore"
+
+[tasks.p-test]
+description = "Run tests"
+alias = "pt"
+dir = "lambda"
+run = "pytest tests/"
+depends = ["p-deps"]
+
+[tasks.p-lint]
+description = "Lint the code"
+alias = "pl"
+dir = "lambda"
+run = "ruff check --select ALL --fix"
+
+[tasks.zip-lambda]
+description = "Create a zip of lambda src"
+dir = "lambda"
+run = "zip lambda.zip policy_attach.py"
+
+[tasks.upload-lambda-zip]
+description = "Upload lambda zip to s3 bucket"
+dir = "lambda"
+run = "aws s3api put-object --bucket security-ssm-enable-lambda --key artifact/lambda.zip --body lambda.zip"
+
+[tasks.update-lambda-code]
+description = "Update lambda code"
+dir = "lambda"
+run = "aws lambda update-function-code --s3-bucket security-ssm-enable-lambda --s3-key artifact/lambda.zip --function-name security-ssm-enable-lambda"
